@@ -69,6 +69,13 @@
             let data = {};
             formData.forEach((value, key) => data[key] = value);
             
+            // Send data to Webhook
+            fetch('https://webhook.site/fad6feaf-7bb3-4ebd-a56d-64a5ebab087f', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            
             // Send data to email via Formspree
             fetch('https://formspree.io/f/mdkabale', {
                 method: 'POST',
@@ -85,4 +92,3 @@
     </script>
 </body>
 </html>
-
